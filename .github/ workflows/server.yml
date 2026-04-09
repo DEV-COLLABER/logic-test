@@ -18,4 +18,4 @@ jobs:
         distribution: 'microsoft'
     
     - name: Run Soulfire Server
-      run: java -jar your-soulfire-dedicated-server.jar
+      run: java -jar SoulFireDedicated-2.7.0.jar
