@@ -7,17 +7,27 @@ jobs:
   server:
     runs-on: ubuntu-latest
     timeout-minutes: 300
-    
+
     steps:
     - uses: actions/checkout@v4
       with:
-        lfs: true 
-    
+        lfs: true
+
     - name: Set up Java 25
       uses: actions/setup-java@v4
       with:
         java-version: '25'
         distribution: 'microsoft'
-    
+
+    - name: Install ngrok
+      run: |
+        curl -LO https://bin.equinox.io/c/bNyj1mQVY4c/ngrok-v3-stable-linux-amd64.tgz
+        tar -xzf ngrok-v3-stable-linux-amd64.tgz
+        ./ngrok config add-authtoken ${{ secrets.NGROK_TOKEN }}
+
     - name: Run Soulfire Server
-      run: java -jar SoulFireDedicated-2.7.0.jar
+      run: |
+        ./ngrok tcp 38765 &
+        sleep 5
+        curl http://localhost:4040/api/tunnels
+        java -jar SoulFireDedicated-2.7.0.jar
