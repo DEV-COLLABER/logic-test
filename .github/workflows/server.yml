@@ -1,0 +1,21 @@
+name: Soulfire Dedicated Server
+
+on:
+  workflow_dispatch:
+
+jobs:
+  server:
+    runs-on: ubuntu-latest
+    timeout-minutes: 300
+    
+    steps:
+    - uses: actions/checkout@v4
+    
+    - name: Set up Java 25
+      uses: actions/setup-java@v4
+      with:
+        java-version: '25'
+        distribution: 'microsoft'
+    
+    - name: Run Soulfire Server
+      run: java -jar SoulFireDedicated-2.7.0.jar
