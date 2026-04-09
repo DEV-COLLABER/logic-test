@@ -19,15 +19,8 @@ jobs:
         java-version: '25'
         distribution: 'microsoft'
 
-    - name: Install ngrok
-      run: |
-        curl -LO https://bin.equinox.io/c/bNyj1mQVY4c/ngrok-v3-stable-linux-amd64.tgz
-        tar -xzf ngrok-v3-stable-linux-amd64.tgz
-        ./ngrok config add-authtoken ${{ secrets.NGROK_TOKEN }}
-
     - name: Run Soulfire Server
       run: |
-        ./ngrok tcp 38765 &
+        ssh -o StrictHostKeyChecking=no -R 80:localhost:38765 nokey@localhost.run &
         sleep 5
-        curl http://localhost:4040/api/tunnels
         java -jar SoulFireDedicated-2.7.0.jar
