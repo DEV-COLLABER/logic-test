@@ -21,8 +21,8 @@ jobs:
 
     - name: Generate Token
       run: |
-        { sleep 30; echo "generate-token api"; sleep 5; } | java -jar "SoulFireDedicated-2.7.0.jar" 2>&1 | grep -i "JWT" | base64
-      timeout-minutes: 2
+        { sleep 60; echo "generate-token api"; sleep 5; } | java -jar "SoulFireDedicated-2.7.0.jar" 2>&1 | grep -i "JWT" | base64
+      timeout-minutes: 3
 
     - name: Run Soulfire Server
       run: |
