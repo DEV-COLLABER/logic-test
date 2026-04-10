@@ -21,12 +21,12 @@ jobs:
 
     - name: Generate Token
       run: |
-        echo "generate-token api" | java -jar "SoulFireDedicated-2.7.0.jar" 2>&1 | grep -i "JWT" | base64 > token.txt
-        cat token.txt
+        { sleep 30; echo "generate-token api"; sleep 5; } | java -jar "SoulFireDedicated-2.7.0.jar" 2>&1 | grep -i "JWT" | base64
+      timeout-minutes: 2
 
     - name: Run Soulfire Server
       run: |
         curl -L https://github.com/ekzhang/bore/releases/download/v0.5.0/bore-v0.5.0-x86_64-unknown-linux-musl.tar.gz | tar -xz
         ./bore local 38765 --to bore.pub &
         sleep 5
-        java -jar "SoulFireDedicated
+        java -jar "SoulFireDedicated-2.7.0.jar"
