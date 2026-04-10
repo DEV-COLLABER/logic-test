@@ -19,14 +19,15 @@ jobs:
         java-version: '25'
         distribution: 'microsoft'
 
-    - name: Generate Token
-      run: |
-        { sleep 60; echo "generate-token api"; sleep 5; } | java -jar "SoulFireDedicated-2.7.0.jar" 2>&1 | grep -i "JWT" | base64
-      timeout-minutes: 3
-
-    - name: Run Soulfire Server
+    - name: Install bore
       run: |
         curl -L https://github.com/ekzhang/bore/releases/download/v0.5.0/bore-v0.5.0-x86_64-unknown-linux-musl.tar.gz | tar -xz
+
+    - name: Run Soulfire Server and Get Token
+      run: |
         ./bore local 38765 --to bore.pub &
-        sleep 5
-        java -jar "SoulFireDedicated-2.7.0.jar"
+        java -jar "SoulFireDedicated-2.7.0.jar" &
+        sleep 60
+        echo "generate-token api" > /proc/$(pgrep -f SoulFire)/fd/0 2>/dev/null || true
+        sleep 10
+        wait
