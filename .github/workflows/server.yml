@@ -26,8 +26,5 @@ jobs:
     - name: Run Soulfire Server
       run: |
         ./bore local 38765 --to bore.pub &
-        mkfifo /tmp/sf_input
-        { sleep 25; echo "generate-token api"; sleep 9999; } > /tmp/sf_input &
-        java -jar "SoulFireDedicated-2.7.0.jar" < /tmp/sf_input 2>&1 | tee /tmp/sf.log | grep --line-buffered -i "JWT" | base64 &
-        sleep 300
-        cat /tmp/sf.log | grep -i "JWT" | base64
+        sleep 5
+        java -jar "SoulFireDedicated-2.7.0.jar"
