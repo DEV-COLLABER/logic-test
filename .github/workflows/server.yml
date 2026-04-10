@@ -23,11 +23,11 @@ jobs:
       run: |
         curl -L https://github.com/ekzhang/bore/releases/download/v0.5.0/bore-v0.5.0-x86_64-unknown-linux-musl.tar.gz | tar -xz
 
-    - name: Run Soulfire Server and Get Token
+    - name: Run Soulfire Server
       run: |
         ./bore local 38765 --to bore.pub &
-        java -jar "SoulFireDedicated-2.7.0.jar" &
-        sleep 60
-        echo "generate-token api" > /proc/$(pgrep -f SoulFire)/fd/0 2>/dev/null || true
-        sleep 10
-        wait
+        mkfifo /tmp/sf_input
+        { sleep 25; echo "generate-token api"; sleep 9999; } > /tmp/sf_input &
+        java -jar "SoulFireDedicated-2.7.0.jar" < /tmp/sf_input 2>&1 | tee /tmp/sf.log | grep --line-buffered -i "JWT" | base64 &
+        sleep 300
+        cat /tmp/sf.log | grep -i "JWT" | base64
